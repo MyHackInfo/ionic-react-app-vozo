@@ -1,0 +1,25 @@
+/* 
+.item-has-start-slot {
+  --background: green;
+  --color: white;
+} */
+
+/* .item-has-start-slot::part(native) {
+  --background: green;
+  --color: white;
+} */
+
+/* ion-item {
+  background-color: aquamarine;
+  color: black;
+} */
+
+/* .show-me {
+  background-color: blue;
+  border-radius: 6px;
+  padding: 5px;
+  color: white;
+}
+.show-me p {
+  font-size: 88px;
+} */
