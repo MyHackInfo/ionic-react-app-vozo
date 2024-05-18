@@ -25,55 +25,19 @@ import {
 } from "@ionic/react";
 import { trashBinOutline } from "ionicons/icons";
 import React, { useEffect, useRef, useState } from "react";
+import { useGetUsersQuery } from "../services/user";
 
 import "./List.css";
 
 const List: React.FC = () => {
-  const [users, setUsers] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [selectedUser, setSelectedUser] = useState<any>(null);
+  const { data: users, isLoading: loading } = useGetUsersQuery();
 
   const [showAlert] = useIonAlert();
   const [showToast] = useIonToast();
   const model = useRef<HTMLIonModalElement>(null);
 
-  const getUser = async () => {
-    const data = await fetch("https://randomuser.me/api?results=10");
-    const { results } = await data.json();
-    setUsers(results);
-    setLoading(false);
-  };
-
-  const clearList = () => {
-    showAlert({
-      header: "Confirm",
-      message: "Are you sure you want to delete all users?",
-      buttons: [
-        { text: "Cancel", role: "cancel" },
-        {
-          text: "Delete",
-          handler: () => {
-            setUsers([]);
-            showToast({
-              message: "All users deleted",
-              duration: 2000,
-              color: "danger",
-            });
-          },
-        },
-      ],
-    });
-  };
-
-  const doRefresh = async (event: any) => {
-    getUser();
-    event.detail.complete();
-  };
-  useEffect(() => {
-    getUser();
-  }, []);
-
-  console.log(users);
+  console.log("isLoading", loading, users);
 
   return (
     <IonPage>
@@ -82,9 +46,9 @@ const List: React.FC = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>List</IonTitle>
+          <IonTitle>List2</IonTitle>
           <IonButtons slot="end">
-            <IonButton onClick={clearList}>
+            <IonButton>
               <IonIcon
                 slot="icon-only"
                 icon={trashBinOutline}
@@ -98,7 +62,7 @@ const List: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <IonRefresher slot="fixed" onIonRefresh={doRefresh}>
+        <IonRefresher slot="fixed">
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
 
@@ -121,7 +85,7 @@ const List: React.FC = () => {
             </IonCard>
           ))}
 
-        {users?.map((user) => (
+        {users?.results?.map((user: any) => (
           <IonCard key={user.cell} onClick={() => setSelectedUser(user)}>
             <IonCardContent className="ion-no-padding">
               <IonItem lines="none">
